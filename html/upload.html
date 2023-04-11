@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      input {
+        display: block;
+        clear: both;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>Planet Metadata Uploader</h2>
+
+    <label for="baseUri">baseUri :</label>
+    <input id="baseUri" autocomplete="off" value="http://localhost:3001" />
+
+    <label for="tokenId">TokenId :</label>
+    <input id="tokenId" autocomplete="off" value="0" />
+
+    <label for="name">Name :</label>
+    <input id="name" autocomplete="off" value="jupiter #0" />
+
+    <label for="description">Description :</label>
+    <input
+      id="description"
+      autocomplete="off"
+      value="Jupiter is the fifth planet from the Sun and the largest in the Solar System. "
+    />
+
+    <label for="attributes">Attributes :</label><br />
+    <textarea id="attributes" autocomplete="off" style="width: 170px" rows="5">
+[{"trait_type": "rarity","value": "common"}]</textarea
+    ><br />
+
+    <label for="image">Image :</label>
+    <input type="file" id="image" accept="image/*" />
+
+    <button onclick="onSubmit();">submit</button>
+    <div id="tokenURIs"></div>
+
+    <div id="result"></div>
+
+    <script>
+      async function onSubmit() {
+        try {
+          const { baseUri, tokenId, name, description, attributes } =
+            validateAndGetValue();
+
+          const imageInput = document.getElementById("image");
+          if (!imageInput.files[0]) {
+            throw new Error("please select image to upload");
+          }
+          const formData = new FormData();
+          formData.append("image", imageInput.files[0]);
+          formData.append("baseUri", baseUri);
+          formData.append("tokenId", tokenId);
+          formData.append("name", name);
+          formData.append("description", description);
+          formData.append("attributes", attributes);
+          const res = await postFormData(`${baseUri}/metadata`, formData);
+
+          const metadataUrl = `${baseUri}/metadata/${tokenId}`;
+          document.getElementById(
+            "result"
+          ).innerHTML = `<p>upload success! Check "${metadataUrl}"</p>`;
+        } catch (e) {
+          alert(e.message);
+        }
+      }
+
+      function validateAndGetValue() {
+        const baseUri = document.getElementById("baseUri").value;
+        if (!baseUri) {
+          throw new Error("please fill in the `baseUri`");
+        }
+        const tokenId = document.getElementById("tokenId").value;
+        if (!tokenId) {
+          throw new Error("please fill in the `tokenId`");
+        }
+        const name = document.getElementById("name").value;
+        if (!name) {
+          throw new Error("please fill in the `name`");
+        }
+        const description = document.getElementById("description").value;
+        if (!description) {
+          throw new Error("please fill in the `description`");
+        }
+        let attributes = document.getElementById("attributes").value;
+        if (attributes) {
+          try {
+            JSON.parse(attributes);
+          } catch (e) {
+            throw new Error("`attributes` cannot be convert to JSON");
+          }
+        } else {
+          attributes = "[]";
+        }
+
+        return { baseUri, tokenId, name, description, attributes };
+      }
+
+      async function postFormData(url = "", formdata) {
+        const response = await fetch(url, {
+          method: "POST",
+          mode: "cors",
+          cache: "no-cache",
+          credentials: "same-origin",
+          redirect: "follow",
+          referrerPolicy: "no-referrer",
+          body: formdata,
+        });
+        return response.json();
+      }
+    </script>
+  </body>
+</html>
