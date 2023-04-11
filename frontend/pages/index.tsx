@@ -174,7 +174,9 @@ export default function Home() {
               >
                 <div className="flex min-w-0 flex-1 justify-end">
                   {currentAddress ? (
-                    `${currentNetwork}:${currentAddress}`
+                    `${
+                      currentNetwork === "bnbt" ? "BSC Testnet" : currentNetwork
+                    }:${currentAddress}`
                   ) : (
                     <button
                       onClick={connectWallet}
