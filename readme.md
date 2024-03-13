@@ -1,7 +1,7 @@
 # ChainIDE Showcase PlanetNFT
 
 ### Introduction
-ChainIDE Showcase PlanetNFT is an NFT (non-fungible token) project that allows users to purchase and own unique digital planets. The contract includes functions for minting the NFTs, setting the sale price, and withdrawing funds or tokens. It also uses various OpenZeppelin libraries for safe ERC20 token transfers, access control, and preventing reentrancy attacks. The maximum supply of the NFTs is set upon contract creation, and the contract owner can grant or revoke admin roles for managing the contract.
+ChainIDE Showcase PlanetNFT is an NFT (non-fungible token) project that allows users to purchase and own unique digital planets. The contract includes functions for minting the NFTs, setting the sale price, and withdrawing funds or tokens. It also uses various OpenZeppelin libraries for safe ERC20 & 721 token transfers, access control, and preventing reentrancy attacks. The maximum supply of the NFTs is set upon contract creation, and the contract owner can grant or revoke admin roles for managing the contract.
 
 > NOTE: This is an incomplete tutorial, mainly based on the demo video.
 
