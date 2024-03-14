@@ -60,10 +60,14 @@ export default function Home() {
             to see details
           </div>
         ),
-        { duration: 10000 }
+        { duration: 100000 }
       );
     } catch (e) {
-      alert((e as any).message);
+      toast.error(() => (
+        <div className="whitespace-pre-wrap truncate w-full">
+          {(e as any).message}
+        </div>
+      ));
       console.log(e);
     } finally {
       setLoading(false);

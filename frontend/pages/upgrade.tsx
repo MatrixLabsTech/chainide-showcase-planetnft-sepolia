@@ -1,5 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { ethers } from "ethers";
@@ -51,7 +51,7 @@ export default function Upgrade() {
         <div className="">
           <div className="flex gap-2">
             <button className="border-r border-gray-300 pr-2 text-xl">
-              My Planets(2)
+              My Planets({nfts.length})
             </button>
 
             <button className="text-xl text-gray-400">
@@ -60,31 +60,24 @@ export default function Upgrade() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-4">
           {nfts.map((id: string) => (
-            <div
-              className="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
-              key={id}
-            >
+            <div className="max-w-sm bg-white rounded" key={id}>
               <Link href={`/item/${id}`}>
-                <Image
-                  className="rounded-t-lg"
-                  src="https://flowbite.com/docs/images/blog/image-1.jpg"
-                  alt=""
-                  width={400}
-                  height={400}
-                />
+                <div className="relative rounded border border-gray-200 w-full h-[200px] flex items-center justify-center p-2">
+                  <img
+                    className="rounded"
+                    src="https://placehold.co/200x200/EEE/31343C"
+                    alt=""
+                  />
+                </div>
               </Link>
-              <div className="p-5">
+              <div className="p-2">
                 <Link href={`/item/${id}`}>
-                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  <h5 className="mb-2 text-center font-light tracking-tight text-[#3B3C3D]">
                     #{id}
                   </h5>
                 </Link>
-                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                  Here are the biggest enterprise technology acquisitions of
-                  2021 so far, in reverse chronological order.
-                </p>
               </div>
             </div>
           ))}

@@ -26,5 +26,5 @@ export const useWalletStore = create<WalletStore>((set) => ({
   setNetwork: (network) => set({ network }),
   setSigner: (signer) => set({ signer }),
   setAddress: (address) => set({ address }),
-  reset: () => set({ signer: null, address: "" }),
+  reset: () => set({ signer: null, address: "", network: "", provider: null }),
 }));
