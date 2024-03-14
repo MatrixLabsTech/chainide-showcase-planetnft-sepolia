@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 
 export const planetPerPrice = ethers.utils.parseEther("0.000000001");
 export const planetContractAddress =
-  "0x27edEB4b1eeFE11e3Cd98Dd8f2156528689E6191";
+  "0x04037436E88810CFc698c20e1239EE974cde6230";
 export const planetContractAbi = [
   {
     inputs: [

@@ -1,7 +1,8 @@
 import Head from "next/head";
 import { ethers } from "ethers";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import Image from "next/image";
+import { useWalletStore } from "../stores";
 
 import moon from "../styles/imgs/moon.png";
 import {
@@ -10,91 +11,19 @@ import {
   planetPerPrice,
 } from "../components/contractInfo";
 import { Loading } from "../components/loading";
+import toast from "react-hot-toast";
 
 export default function Home() {
-  const [currentProvider, setCurrentProvider] = useState<
-    undefined | ethers.providers.Web3Provider
-  >();
-  const [currentSigner, setCurrentSigner] = useState<
-    undefined | ethers.providers.JsonRpcSigner
-  >();
-  const [currentAddress, setCurrentAddress] = useState<undefined | string>();
-  const [currentNetwork, setCurrentNetwork] = useState<undefined | string>();
   const [loading, setLoading] = useState(false);
-  const connectWallet = useCallback(async () => {
-    if (!currentProvider) {
-      const provider = new ethers.providers.Web3Provider(
-        (window as any).ethereum
-      );
-      (window as any).ethereum.on("chainChanged", () => {
-        window.location.reload();
-      });
-      (window as any).ethereum.on("accountsChanged", async () => {
-        window.location.reload();
-      });
-      setCurrentProvider(provider);
-    }
-    await currentProvider?.send("eth_requestAccounts", []);
-    const network = await currentProvider?.getNetwork();
-    console.log(network);
 
-    setCurrentNetwork(network?.name);
-    const signer = currentProvider?.getSigner();
-    setCurrentSigner(signer);
-    setCurrentAddress(await signer?.getAddress());
-  }, [currentProvider]);
-
-  const switchToMumbai = useCallback(async () => {
-    if ((window as any).ethereum) {
-      const chainId = "0x61"; // BSC testnet
-      const currentChainId = await (window as any).ethereum.request({
-        method: "eth_chainId",
-      });
-      console.log(currentChainId, chainId);
-
-      if (currentChainId !== chainId) {
-        try {
-          // metamask new version bug, can not switch -> https://github.com/MetaMask/metamask-extension/issues/18509
-          // should delete netwowork.then add
-          await (window as any).ethereum.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: chainId }],
-          });
-        } catch (err) {
-          // This error code indicates that the chain has not been added to MetaMask
-          if ((err as any).code === 4902) {
-            await (window as any).ethereum.request({
-              method: "wallet_addEthereumChain",
-              params: [
-                {
-                  chainName: "bnbt",
-                  chainId: chainId,
-                  nativeCurrency: {
-                    name: "BSC Testnet",
-                    decimals: 18,
-                    symbol: "BNB",
-                  },
-                  rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-                },
-              ],
-            });
-          }
-        }
-      }
-
-      const network = await currentProvider?.getNetwork();
-      setCurrentNetwork(network?.name);
-      const signer = currentProvider?.getSigner();
-      setCurrentSigner(signer);
-      setCurrentAddress(await signer?.getAddress());
-    }
-  }, [currentProvider]);
+  const { address, signer, network } = useWalletStore();
 
   const [openseaUrl, setOpenSeaUrl] = useState<undefined | string>();
+
   const mint = useCallback(async () => {
     console.log("mint");
 
-    if (!currentSigner) {
+    if (!signer) {
       alert("please connect wallet!");
       return;
     }
@@ -104,7 +33,7 @@ export default function Home() {
       const contract = new ethers.Contract(
         planetContractAddress,
         planetContractAbi,
-        currentSigner
+        signer
       );
       const count = 1;
       const transaction = await contract.mint(count, {
@@ -116,17 +45,30 @@ export default function Home() {
       )[0].args[2] as ethers.BigNumber;
       const openseaUrl = `https://testnets.opensea.io/assets/bsc-testnet/${planetContractAddress}/${mintedTokenId.toString()}`;
       setOpenSeaUrl(openseaUrl);
+      toast.success(
+        (t) => (
+          <div>
+            mint success! check{" "}
+            <a
+              className="font-medium text-blue-600 hover:underline"
+              href={openseaUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              opensea
+            </a>{" "}
+            to see details
+          </div>
+        ),
+        { duration: 10000 }
+      );
     } catch (e) {
       alert((e as any).message);
       console.log(e);
     } finally {
       setLoading(false);
     }
-  }, [currentSigner]);
-
-  useEffect(() => {
-    connectWallet();
-  }, [connectWallet]);
+  }, [signer]);
 
   return (
     <>
@@ -165,31 +107,6 @@ export default function Home() {
           </svg>
         </div>
 
-        <div className="absolute top-0 right-0">
-          <div className="px-6 pt-6 lg:px-8">
-            <div>
-              <nav
-                className="flex h-9 items-center justify-between"
-                aria-label="Global"
-              >
-                <div className="flex min-w-0 flex-1 justify-end">
-                  {currentAddress ? (
-                    `${
-                      currentNetwork === "bnbt" ? "BSC Testnet" : currentNetwork
-                    }:${currentAddress}`
-                  ) : (
-                    <button
-                      onClick={connectWallet}
-                      className="inline-block rounded-lg px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-gray-900/10 hover:ring-gray-900/20"
-                    >
-                      Connect
-                    </button>
-                  )}
-                </div>
-              </nav>
-            </div>
-          </div>
-        </div>
         <main className="w-full">
           <div className="relative px-6 lg:px-8">
             <div className="mx-auto max-w-3xl pt-3 pb-5 sm:pt-10 sm:pb-10">
@@ -223,45 +140,16 @@ export default function Home() {
                       className="m-auto py-[50px]"
                     />
                     <br />
-
-                    {currentNetwork === "bnbt" ? (
-                      <div>
-                        To begin minting a Planet NFT, click the button below.
-                      </div>
-                    ) : (
-                      <div>
-                        To claim this NFT, please switch to{" "}
-                        <button
-                          onClick={switchToMumbai}
-                          className="text-sky-500 background-transparent font-bold outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150 underline"
-                          type="button"
-                        >
-                          BSC Testnet
-                        </button>
-                        .
-                      </div>
-                    )}
                   </div>
                   <div className="mt-8 flex gap-x-4 sm:justify-center">
                     <button
                       onClick={mint}
-                      disabled={loading || currentNetwork !== "bnbt"}
-                      className=" disabled:opacity-75 inline-flex items-center gap-x-0.5 rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
+                      disabled={loading || network !== "bnbt"}
+                      className="disabled:opacity-75 cursor-pointer inline-flex items-center gap-x-0.5 rounded-lg bg-indigo-600 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-indigo-600 hover:bg-indigo-700 hover:ring-indigo-700"
                     >
                       {loading && <Loading />}
                       Mint Now
                     </button>
-                  </div>
-                  <div className="mt-8 flex gap-x-4 sm:justify-center">
-                    {openseaUrl && (
-                      <p className="text-[#1e9427]">
-                        mint success! check{" "}
-                        <a href={openseaUrl} target="_blank" rel="noreferrer">
-                          {openseaUrl}
-                        </a>{" "}
-                        to see details
-                      </p>
-                    )}
                   </div>
                 </div>
               </div>

@@ -8,8 +8,6 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: #15294e;
-  overflow: hidden;
 }
 body > div {
   width: 100%;
