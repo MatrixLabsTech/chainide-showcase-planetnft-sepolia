@@ -1,22 +1,20 @@
+import metadataDao, { MetadataDao } from '@/dao/metadata.dao';
 import { Metadata } from '@/interfaces/metadata.interface';
-import { HttpException } from '@exceptions/HttpException';
 
-class MetadataService {
-  public metadataList: Metadata[] = [];
+export class MetadataService {
+  private metadataDao: MetadataDao = metadataDao;
 
   public async uploadMetadata(metadata: Metadata): Promise<void> {
-    const index: number = this.metadataList.findIndex(data => data.tokenId == metadata.tokenId);
-    if (index > -1) {
-      this.metadataList.splice(index, 1);
-    }
-    this.metadataList.push(metadata);
+    await this.metadataDao.upsert(metadata);
   }
 
   public async getMetadata(tokenId: number): Promise<Metadata> {
-    const metadata: Metadata = this.metadataList.find(metadata => metadata.tokenId == tokenId);
-    if (!metadata) throw new HttpException(409, "Metadata doesn't exist");
-    return metadata;
+    return this.metadataDao.getMetadata(tokenId);
+  }
+
+  public async getMetadataByIds(tokenIds: number[]): Promise<Metadata[]> {
+    return this.metadataDao.getMetadataByIds(tokenIds);
   }
 }
 
-export default MetadataService;
+export default new MetadataService();

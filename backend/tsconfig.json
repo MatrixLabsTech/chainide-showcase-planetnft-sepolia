@@ -31,6 +31,9 @@
       "@models/*": ["models/*"],
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
+      "@provider/*": ["provider/*"],
+      "@syncer/*": ["syncer/*"],
+      "@contract/*": ["contract/*"],
       "@utils/*": ["utils/*"]
     }
   },

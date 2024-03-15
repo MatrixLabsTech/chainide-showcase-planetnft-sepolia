@@ -1,10 +1,10 @@
 import { UploadMetadataDto } from '@/dtos/metadata.dto';
 import { Metadata } from '@/interfaces/metadata.interface';
-import MetadataService from '@services/metadata.service';
+import metadataService, { MetadataService } from '@services/metadata.service';
 import { NextFunction, Request, Response } from 'express';
 
 class MetadataController {
-  public metadataService = new MetadataService();
+  public metadataService: MetadataService = metadataService;
 
   public getMetadata = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -14,6 +14,18 @@ class MetadataController {
         metadata.attributes = JSON.parse(metadata.attributes);
       } catch (e) {}
       res.status(200).json(metadata);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public batchGetMetadata = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const metadatas: Metadata[] = await this.metadataService.getMetadataByIds(req.body.tokenIds);
+      try {
+        metadatas.map(metadata => (metadata.attributes = JSON.parse(metadata.attributes)));
+      } catch (e) {}
+      res.status(200).json(metadatas);
     } catch (error) {
       next(error);
     }

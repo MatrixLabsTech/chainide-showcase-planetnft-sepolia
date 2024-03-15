@@ -1,4 +1,4 @@
-import { Aroperties } from '@/interfaces/metadata.interface';
+import { Attributes } from '@/interfaces/metadata.interface';
 import { IsNumber, IsString } from 'class-validator';
 
 export class UploadMetadataDto {
