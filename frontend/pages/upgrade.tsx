@@ -2,6 +2,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { Skeleton } from "antd";
 import { ethers } from "ethers";
 import { useWalletStore } from "../stores";
 
@@ -9,10 +10,12 @@ import {
   planetContractAbi,
   planetContractAddress,
 } from "../components/contractInfo";
+import { Space } from "lucide-react";
 
 export default function Upgrade() {
   const { address, signer, network } = useWalletStore();
   const [nfts, setNfts] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
 
   const getUserNft = useCallback(async () => {
     if (!signer) {
@@ -20,6 +23,7 @@ export default function Upgrade() {
     }
 
     if (network !== "bnbt") return;
+    setLoading(true);
     const contract = new ethers.Contract(
       planetContractAddress,
       planetContractAbi,
@@ -33,6 +37,7 @@ export default function Upgrade() {
     }
 
     setNfts(tokenIds.map((id) => id.toString()));
+    setLoading(false);
   }, [address, network, signer]);
 
   useEffect(() => {
@@ -61,6 +66,20 @@ export default function Upgrade() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mt-4">
+          {loading &&
+            [...Array(8)].map((_, i) => (
+              <div key={i} className="flex flex-col gap-2 items-center">
+                <Skeleton.Image
+                  active={true}
+                  style={{ width: 200, height: 200 }}
+                />
+                <Skeleton.Input
+                  active={true}
+                  style={{ width: 10 }}
+                  size="small"
+                />
+              </div>
+            ))}
           {nfts.map((id: string) => (
             <div className="max-w-sm bg-white rounded" key={id}>
               <Link href={`/item/${id}`}>

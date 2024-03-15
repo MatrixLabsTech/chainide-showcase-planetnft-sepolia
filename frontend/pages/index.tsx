@@ -2,6 +2,7 @@ import Head from "next/head";
 import { ethers } from "ethers";
 import { useCallback, useState } from "react";
 import Image from "next/image";
+import { message } from "antd";
 import { useWalletStore } from "../stores";
 
 import moon from "../styles/imgs/moon.png";
@@ -45,29 +46,26 @@ export default function Home() {
       )[0].args[2] as ethers.BigNumber;
       const openseaUrl = `https://testnets.opensea.io/assets/bsc-testnet/${planetContractAddress}/${mintedTokenId.toString()}`;
       setOpenSeaUrl(openseaUrl);
-      toast.success(
-        (t) => (
-          <div>
-            mint success! check{" "}
-            <a
-              className="font-medium text-blue-600 hover:underline"
-              href={openseaUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              opensea
-            </a>{" "}
-            to see details
-          </div>
-        ),
-        { duration: 100000 }
+      message.success(
+        <div>
+          mint success! check{" "}
+          <a
+            className="font-medium text-blue-600 hover:underline"
+            href={openseaUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            opensea
+          </a>{" "}
+          to see details
+        </div>
       );
     } catch (e) {
-      toast.error(() => (
+      message.error(
         <div className="whitespace-pre-wrap truncate w-full">
           {(e as any).message}
         </div>
-      ));
+      );
       console.log(e);
     } finally {
       setLoading(false);

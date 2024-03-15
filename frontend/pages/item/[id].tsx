@@ -1,12 +1,23 @@
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
+import { Modal } from "antd";
+import Head from "next/head";
+import { useState } from "react";
 import { planetContractAddress } from "../../components/contractInfo";
 
 export default function ItemDetail() {
   const router = useRouter();
   const { id } = router.query;
+
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+
   return (
     <div className="pt-20 container mx-auto p-4 md:px-0 ">
+      <Head>
+        <title>ChainIDE showcase planetNFT</title>
+        <meta name="description" content="chainIDE planet template" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <button className="px-4 py-2 bg-[#7F77F5]/10 rounded-md mb-4 text-[#7F77F6] inline-flex gap-2 items-center">
         <svg
           width="21"
@@ -22,8 +33,9 @@ export default function ItemDetail() {
         </svg>
         Rrefresh
       </button>
-      <div className="grid grid-cols-3 h-full gap-2">
-        <div className="border rounded col-span-1 flex flex-col items-center p-2 gap-4">
+
+      <div className="grid grid-cols-3 h-full gap-4">
+        <div className="border border-gray-400 rounded col-span-1 flex flex-col items-center p-2 gap-4">
           <div className="flex justify-end w-full">
             <div
               className="bg-[#F1F6FD] p-2 rounded-md cursor-pointer"
@@ -91,11 +103,56 @@ export default function ItemDetail() {
             </p>
           </div>
         </div>
-        <div className="grid grid-rows-2 h-full gap-2 col-span-2">
-          <div className="border rounded">Right Top</div>
-          <div className="border rounded">Right Bottom</div>
+        <div className="grid grid-rows-2 h-full gap-4 col-span-2">
+          <div className="border border-gray-400 rounded p-2">
+            <h5 className="font-bold text-[#3B3C3D] flex gap-1 items-center">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect width="16" height="16" rx="1" fill="#3B3C3D" />
+                <path
+                  d="M8.38133 9.116H9.688V11.9265H8.38133V13.945H7.61867V11.9265H6.31733V9.1215H7.624V3.11H7.67733V3.055H8.38133V9.116ZM6.408 5.0405H5.09067V3H4.32267V5.0405H3V7.8785H4.32267V14H5.096V7.8785H6.41333V5.0405H6.408ZM11.6827 5.0405V3H10.9147V5.0405H9.59733V7.8785H10.9147V14H11.6827V7.8785H13V5.0405H11.6827Z"
+                  fill="white"
+                />
+              </svg>
+              Properties
+            </h5>
+          </div>
+          <div className="border border-gray-400 rounded p-2">
+            <h5 className="font-bold text-[#3B3C3D] flex gap-1 items-center">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect width="16" height="16" rx="1" fill="#3B3C3D" />
+                <path
+                  d="M14 7.52287C14.0006 7.6109 13.9725 7.69652 13.9203 7.76571C13.8682 7.83489 13.795 7.88354 13.7129 7.90368C13.6308 7.92382 13.5446 7.91426 13.4683 7.87656C13.3921 7.83886 13.3304 7.77526 13.2933 7.69618H13.29L12.2212 5.46621L10.2369 12.7148H10.2305C10.2095 12.7962 10.1634 12.8682 10.0994 12.9197C10.0355 12.9712 9.95706 12.9994 9.87626 13C9.80206 12.9998 9.72956 12.9767 9.66797 12.9335C9.60637 12.8904 9.55844 12.8291 9.53024 12.7574L7.25769 6.99785L5.35177 11.9711C5.32485 12.0426 5.27821 12.1043 5.21773 12.1482C5.15726 12.1921 5.08567 12.2163 5.01201 12.2178C4.93835 12.2193 4.86593 12.1979 4.8039 12.1564C4.74186 12.115 4.693 12.0552 4.66349 11.9848L4.66086 11.9785L3.51297 9.28338L2.72571 11.1957C2.70785 11.2451 2.68057 11.2903 2.64552 11.3285C2.61047 11.3667 2.56837 11.397 2.52176 11.4177C2.47515 11.4384 2.42501 11.4491 2.37435 11.449C2.3237 11.4489 2.27358 11.4381 2.22703 11.4173C2.18048 11.3964 2.13846 11.366 2.10351 11.3277C2.06856 11.2894 2.04141 11.2442 2.02369 11.1946C2.00597 11.1451 1.99805 11.0924 2.00041 11.0395C2.00277 10.9867 2.01536 10.935 2.03742 10.8874L3.16207 8.15118C3.19105 8.08168 3.23876 8.02246 3.29938 7.98073C3.36 7.93899 3.43094 7.91653 3.50356 7.91607C3.57619 7.91562 3.64738 7.93719 3.70848 7.97816C3.76958 8.01913 3.81796 8.07774 3.84774 8.14687L3.85036 8.15313L4.98589 10.8205L6.90567 5.81283C6.93366 5.74116 6.98139 5.67975 7.04283 5.63639C7.10427 5.59303 7.17665 5.56966 7.25081 5.56925C7.32498 5.56883 7.3976 5.59138 7.45948 5.63404C7.52136 5.6767 7.56973 5.73756 7.59846 5.80892L9.81028 11.4187L11.7631 4.2855H11.7694C11.7886 4.20965 11.8295 4.14176 11.8868 4.09101C11.9441 4.04026 12.015 4.00908 12.0898 4.0017C12.1646 3.99432 12.2398 4.01109 12.3052 4.04974C12.3706 4.08839 12.4231 4.14706 12.4555 4.21782H12.4588L13.9584 7.3476H13.955C13.9833 7.40142 13.9987 7.46153 14 7.52287Z"
+                  fill="white"
+                  stroke="white"
+                  stroke-width="0.5"
+                />
+              </svg>
+              Item Activity
+            </h5>
+          </div>
         </div>
       </div>
+
+      <Modal
+        open={showUpgradeModal}
+        onCancel={() => setShowUpgradeModal(false)}
+        footer={null}
+        width={600}
+      >
+        111
+      </Modal>
     </div>
   );
 }

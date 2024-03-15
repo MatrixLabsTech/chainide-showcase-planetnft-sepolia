@@ -1,14 +1,12 @@
 /* eslint-disable @next/next/no-title-in-document-head */
-import { Html, Head, Main, NextScript } from "next/document";
-import Link from "next/link";
+import Document, { Html, Head, Main, NextScript } from "next/document";
+import { createCache, extractStyle, StyleProvider } from "@ant-design/cssinjs";
+import type { DocumentContext } from "next/document";
 
-export default function Document() {
+export default function MyDocument() {
   return (
     <Html lang="en">
       <Head>
-        <title>ChainIDE showcase planetNFT</title>
-        <meta name="description" content="chainIDE planet template" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -28,3 +26,29 @@ export default function Document() {
     </Html>
   );
 }
+
+MyDocument.getInitialProps = async (ctx: DocumentContext) => {
+  const cache = createCache();
+  const originalRenderPage = ctx.renderPage;
+  ctx.renderPage = () =>
+    originalRenderPage({
+      enhanceApp: (App) => (props) =>
+        (
+          <StyleProvider cache={cache}>
+            <App {...props} />
+          </StyleProvider>
+        ),
+    });
+
+  const initialProps = await Document.getInitialProps(ctx);
+  const style = extractStyle(cache, true);
+  return {
+    ...initialProps,
+    styles: (
+      <>
+        {initialProps.styles}
+        <style dangerouslySetInnerHTML={{ __html: style }} />
+      </>
+    ),
+  };
+};
