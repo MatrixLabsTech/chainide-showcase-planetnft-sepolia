@@ -1,6 +1,7 @@
 import { BlockInfo, BlockInfos, BlockSyncStatus } from '@/interfaces/blockInfo.interface';
 import { Low } from '@huanshiwushuang/lowdb';
 import { JSONFile } from '@huanshiwushuang/lowdb/node';
+import blockInfoData from '../db/blockInfo.json';
 
 export class BlockInfoDao {
   private db: Low<BlockInfos>;
@@ -9,17 +10,7 @@ export class BlockInfoDao {
   }
 
   private async init() {
-    const defaultData: BlockInfos = {
-      blockInfos: [
-        {
-          oldBlockNumber: 38562545,
-          newBlockNumber: 38562545,
-          status: 'Finished',
-          time: 1710439331693,
-        },
-      ],
-    };
-    this.db = await new Low(new JSONFile<BlockInfos>('blockInfo.json'), defaultData);
+    this.db = await new Low(new JSONFile<BlockInfos>('./src/db/blockInfo.json'), blockInfoData);
   }
 
   async selectOne(): Promise<BlockInfo> {

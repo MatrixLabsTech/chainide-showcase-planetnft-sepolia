@@ -3,6 +3,7 @@ import { Metadata, Metadatas } from '@/interfaces/metadata.interface';
 import { Low } from '@huanshiwushuang/lowdb';
 import { JSONFile } from '@huanshiwushuang/lowdb/node';
 import { error } from 'console';
+import metadatas from '../db/metadata.json';
 
 export class MetadataDao {
   private db: Low<Metadatas>;
@@ -11,8 +12,7 @@ export class MetadataDao {
   }
 
   private async init() {
-    const defaultData: Metadatas = { metadatas: [] };
-    this.db = await new Low(new JSONFile<Metadatas>('metadata.json'), defaultData);
+    this.db = await new Low(new JSONFile<Metadatas>('./src/db/metadata.json'), metadatas);
   }
 
   async upsert(metadata: Metadata): Promise<void> {

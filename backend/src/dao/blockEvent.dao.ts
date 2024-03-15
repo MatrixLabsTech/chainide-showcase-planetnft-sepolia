@@ -1,6 +1,7 @@
 import { BlockEvent, BlockEvents, EventType } from '@/interfaces/blockEvent.interface';
 import { Low } from '@huanshiwushuang/lowdb';
 import { JSONFile } from '@huanshiwushuang/lowdb/node';
+import blockEvents from '../db/blockEvents.json';
 
 export class BlockEventsDao {
   private db: Low<BlockEvents>;
@@ -9,8 +10,7 @@ export class BlockEventsDao {
   }
 
   private async init() {
-    const defaultData: BlockEvents = { blockEvents: [] };
-    this.db = await new Low(new JSONFile<BlockEvents>('blockEvents.json'), defaultData);
+    this.db = await new Low(new JSONFile<BlockEvents>('./src/db/blockEvents.json'), blockEvents);
   }
 
   async getBlockEvents(tokenId: number): Promise<BlockEvent[]> {
