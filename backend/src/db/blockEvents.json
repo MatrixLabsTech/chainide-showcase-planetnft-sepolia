@@ -1,14 +1,3 @@
 {
-  "blockEvents": [
-    {
-      "tokenId": 0,
-      "event": "Transfer",
-      "eventTime": 1710399814,
-      "from": "0xca9E93C18C80Ce9549f32484dE257830F45A06f0",
-      "to": "0xdc493560768D69579Fa27eD2D3C95A4D014d0CFe",
-      "blockNumber": 38562711,
-      "transactionHash": "0xe52ce7fa8964988d166f538435371030640510dcef411a7f57b8e194ce1ff20c",
-      "transactionIndex": 6
-    }
-  ]
+  "blockEvents": []
 }
