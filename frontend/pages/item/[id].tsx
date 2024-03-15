@@ -1,17 +1,119 @@
 "use client";
 /* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
-import { Modal } from "antd";
+import { Modal, Tabs } from "antd";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import config from "../../config";
 import { planetContractAddress } from "../../components/contractInfo";
-import { getTokenMetadata } from "../../services";
+import { getTokenMetadata, uploadMetadata } from "../../services";
+import clsx from "clsx";
 
 export default function ItemDetail({ metadata }: any) {
   const router = useRouter();
   const { id } = router.query;
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+
+  const [decoratedImage, setDecoratedImage] = useState<string>("");
+  const [decorations, setDecorations] = useState<any>({
+    cloud: null,
+    spaceship: null,
+    rocket: null,
+    satellite: null,
+  });
+
+  const convertDataURLToFile = (dataURL: string) => {
+    const arr = dataURL.split(",");
+    const mime = arr[0].match(/:(.*?);/)![1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    let u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], `${Date.now()}.png`, { type: mime });
+  };
+
+  const handleUpgradeMetadata = async () => {
+    const formData = new FormData();
+    formData.append("tokenId", id as string);
+    formData.append("baseUri", config.baseApi);
+    formData.append("name", metadata.name);
+    formData.append("description", metadata.description);
+    formData.append("attributes", JSON.stringify(metadata.attributes));
+    formData.append("image", convertDataURLToFile(decoratedImage) as File);
+    await uploadMetadata(formData);
+    toast.success("Upgrade success");
+  };
+
+  const drawImage = (url: string, decorations: any[]) => {
+    const pixelRatio = 12;
+    const canvas = document.createElement("canvas")! as HTMLCanvasElement;
+    canvas.width = 200 * pixelRatio;
+    canvas.height = 200 * pixelRatio;
+    const ctx = canvas.getContext("2d");
+    ctx?.clearRect(0, 0, 200 * pixelRatio, 200 * pixelRatio);
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.src = url;
+    ctx?.scale(pixelRatio, pixelRatio);
+    image.onload = () => {
+      ctx?.drawImage(image, 0, 0, 200, 200);
+      for (let decoration of decorations) {
+        const decorationImage = new Image();
+        decorationImage.crossOrigin = "anonymous";
+        decorationImage.src = decoration.url;
+        decorationImage.onload = () => {
+          ctx?.drawImage(decorationImage, 0, 0);
+          setDecoratedImage(ctx?.canvas.toDataURL("image/png") as string);
+        };
+      }
+    };
+  };
+
+  const handleSelectDecoration = (type: string, id: number) => {
+    const decoration = {
+      type,
+      id,
+      url: `/imgs/${type}/${id}.svg`,
+    };
+    setDecorations((prev: any) => ({ ...prev, [type]: decoration }));
+    // drawImage(metadata.image, Object.values({ ...decorations, [type]: decoration }));
+  };
+
+  useEffect(() => {
+    fetch(metadata.image)
+      .then((response) => response.blob())
+      .then((blob) => {
+        let file = new File([blob], `${Date.now()}.jpg`, {
+          type: "image/jpeg",
+        });
+        setImageFile(file);
+      })
+      .catch((error) => console.error(error));
+  }, [metadata]);
+
+  useEffect(() => {
+    if (showUpgradeModal) {
+      setTimeout(() => {
+        drawImage(
+          metadata.image,
+          Object.values(decorations).filter((o) => o)
+        );
+      }, 100);
+    }
+  }, [showUpgradeModal]);
+
+  useEffect(() => {
+    drawImage(
+      metadata.image,
+      Object.values(decorations).filter((o) => o)
+    );
+    console.log(metadata.image, Object.values(decorations));
+  }, [decorations]);
 
   return (
     <div className="pt-20 container mx-auto p-4 md:px-0 ">
@@ -20,7 +122,10 @@ export default function ItemDetail({ metadata }: any) {
         <meta name="description" content="chainIDE planet template" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <button className="px-4 py-2 bg-[#7F77F5]/10 rounded-md mb-4 text-[#7F77F6] inline-flex gap-2 items-center">
+      <button
+        className="px-4 py-2 bg-[#7F77F5]/10 rounded-md mb-4 text-[#7F77F6] inline-flex gap-2 items-center"
+        onClick={() => window.location.reload()}
+      >
         <svg
           width="21"
           height="20"
@@ -127,6 +232,19 @@ export default function ItemDetail({ metadata }: any) {
               </svg>
               Properties
             </h5>
+
+            <div className="flex items-center justify-center gap-4 flex-col">
+              <div className="rounded-lg bg-[#F6F6F6] text-[#3B3C3D] capitalize inline-flex flex-col px-6 py-3 items-center gap-1">
+                <span className="text-[#818588]">Rarity</span>
+                <span className="font-bold">Common</span>
+              </div>
+              <button
+                className="text-white bg-gradient-to-b from-[#7F77F5] to-[#4840C7] px-10 py-2 rounded-lg"
+                onClick={() => setShowUpgradeModal(true)}
+              >
+                Upgrade
+              </button>
+            </div>
           </div>
           <div className="border border-gray-400 rounded p-2">
             <h5 className="font-bold text-[#3B3C3D] flex gap-1 items-center">
@@ -155,9 +273,163 @@ export default function ItemDetail({ metadata }: any) {
         open={showUpgradeModal}
         onCancel={() => setShowUpgradeModal(false)}
         footer={null}
-        width={600}
+        width={900}
+        destroyOnClose
       >
-        111
+        <div className="flex">
+          <div className="w-1/3">
+            <h5 className="text-center font-bold">Preview</h5>
+
+            <div className="flex items-center justify-center px-4 py-16 flex-col gap-12">
+              <img
+                src={decoratedImage || metadata.image}
+                alt=""
+                crossOrigin="anonymous"
+              />
+              <div className="flex flex-col gap-4 items-center font-light">
+                <button
+                  className="text-white bg-gradient-to-b from-[#7F77F5] to-[#4840C7] px-10 py-2 rounded-lg"
+                  onClick={handleUpgradeMetadata}
+                >
+                  Upgrade
+                </button>
+                <span>Can only be changed once </span>
+              </div>
+            </div>
+          </div>
+          <div className="flex-grow">
+            <h5 className="text-center font-bold">Items</h5>
+
+            <div className="bg-[#f6f6f6] rounded-lg p-4 mt-8">
+              <Tabs
+                defaultActiveKey="1"
+                tabBarGutter={40}
+                items={[
+                  {
+                    key: "1",
+                    label: "Cloud",
+                    children: (
+                      <div className="flex gap-2">
+                        {[...Array(4)].map((_, i) => (
+                          <div
+                            key={i}
+                            className={clsx(
+                              "w-[120px] h-[120px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
+                              {
+                                "border-2 border-[#625ADD]":
+                                  decorations.cloud?.id === i + 1,
+                              }
+                            )}
+                            onClick={() =>
+                              handleSelectDecoration("cloud", i + 1)
+                            }
+                          >
+                            <div className="w-[100px] h-[100px] rounded-full bg-[#C3C2C5]">
+                              <img
+                                src={`/imgs/cloud/${i + 1}.svg`}
+                                className="h-full"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ),
+                  },
+                  {
+                    key: "2",
+                    label: "Spaceship",
+                    children: (
+                      <div className="flex gap-2">
+                        {[...Array(3)].map((_, i) => (
+                          <div
+                            key={i}
+                            className={clsx(
+                              "w-[120px] h-[120px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
+                              {
+                                "border-2 border-[#625ADD]":
+                                  decorations.spaceship?.id === i + 1,
+                              }
+                            )}
+                            onClick={() =>
+                              handleSelectDecoration("spaceship", i + 1)
+                            }
+                          >
+                            <div className="w-[100px] h-[100px] rounded-full bg-[#C3C2C5]">
+                              <img
+                                src={`/imgs/spaceship/${i + 1}.svg`}
+                                className="h-[20px]"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ),
+                  },
+                  {
+                    key: "3",
+                    label: "Rocket",
+                    children: (
+                      <div className="flex gap-2">
+                        {[...Array(2)].map((_, i) => (
+                          <div
+                            key={i}
+                            className={clsx(
+                              "w-[120px] h-[120px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
+                              {
+                                "border-2 border-[#625ADD]":
+                                  decorations.rocket?.id === i + 1,
+                              }
+                            )}
+                            onClick={() =>
+                              handleSelectDecoration("rocket", i + 1)
+                            }
+                          >
+                            <div className="w-[100px] h-[100px] rounded-full bg-[#C3C2C5]">
+                              <img
+                                src={`/imgs/rocket/${i + 1}.svg`}
+                                className="h-[40px]"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ),
+                  },
+                  {
+                    key: "4",
+                    label: "Satellite",
+                    children: (
+                      <div className="flex gap-2">
+                        {[...Array(3)].map((_, i) => (
+                          <div
+                            key={i}
+                            className={clsx(
+                              "w-[120px] h-[120px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
+                              {
+                                "border-2 border-[#625ADD]":
+                                  decorations.satellite?.id === i + 1,
+                              }
+                            )}
+                            onClick={() =>
+                              handleSelectDecoration("satellite", i + 1)
+                            }
+                          >
+                            <div className="w-[100px] h-[100px] rounded-full bg-[#C3C2C5]">
+                              <img
+                                src={`/imgs/satellite/${i + 1}.svg`}
+                                className="h-[40px]"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ),
+                  },
+                ]}
+              />
+            </div>
+          </div>
+        </div>
       </Modal>
     </div>
   );
@@ -165,7 +437,6 @@ export default function ItemDetail({ metadata }: any) {
 
 export async function getServerSideProps() {
   const data = await getTokenMetadata("10");
-  console.log(data);
   return {
     props: {
       metadata: data,
