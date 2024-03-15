@@ -25,6 +25,7 @@ class MetadataRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}/:tokenId`, this.metadataController.getMetadata);
     this.router.post(`${this.path}`, this.upload.single('image'), this.metadataController.uploadMetadata);
+    this.router.post(`${this.path}/batchGet`, this.metadataController.batchGetMetadata);
   }
 }
 

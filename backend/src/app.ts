@@ -12,6 +12,7 @@ import hpp from 'hpp';
 import morgan from 'morgan';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { BlockSyncer } from './syncer/syncer';
 
 class App {
   public app: express.Application;
@@ -27,6 +28,7 @@ class App {
     this.initializeRoutes(routes);
     this.initializeSwagger();
     this.initializeErrorHandling();
+    new BlockSyncer();
   }
 
   public listen() {
