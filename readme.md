@@ -29,14 +29,14 @@ ChainIDE Showcase PlanetNFT is an NFT (non-fungible token) project that allows u
 
    Replace <contract_address> with the previously deployed contract address.
 
-5. [Port forwarding](https://chainide.gitbook.io/chainide-english-1/port-forwarding) HTTP on port 3001 and get the corresponding port. (e.g., [https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com](https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com/)).
+5. [Port forwarding](https://chainide.gitbook.io/chainide-english-1/port-forwarding) HTTP on port 3001 and get the corresponding port. (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com).
 
 ### Generate metadata
 
 1. Download `frontend/styles/ings` to the local environment.
 
 2. Preview `html/upload.html`
-3. Change BASEURI to the corresponding port of the backend.  (e.g., [https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com](https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com/)).
+3. Change BASEURI to the corresponding port of the backend.  (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com).
 
 4. Customize TOKENID, NAME, DESCRIPTION, ATTRIBUTES, and IMAGE.
 
@@ -69,7 +69,7 @@ ATTRIBUTES: [{"trait_type": "rarity","value": "common"}]
 
 1. Interact with the planet contract you just deployed. Click on `setBaseURI` and paste the partially copied address from the previous step. Then click on "Submit".
 
-2. Navigate to `frontend/config.ts` and update the `contractAddress` with your deployed wallet address that you obtained earlier. Replace `baseApi` with the corresponding port generated in **Run backend** section (e.g., [https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com](https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com/)).
+2. Navigate to `frontend/config.ts` and update the `contractAddress` with your deployed wallet address that you obtained earlier. Replace `baseApi` with the corresponding port generated in **Run backend** section (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com).
 
 ```typescript
   contractAddress: "0x19345E47170cbFb0ada10AB516e4dcD5A1A04BE8",
@@ -98,6 +98,6 @@ Add another Sandbox in ChainIDE.
    yarn dev
    ```
 
-5. [Port forwarding](https://chainide.gitbook.io/chainide-english-1/port-forwarding) HTTP on port 3000 and open the corresponding port. (e.g., [https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3000.prod-sandbox.chainide.com](https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com/)).
+5. [Port forwarding](https://chainide.gitbook.io/chainide-english-1/port-forwarding) HTTP on port 3000 and open the corresponding port. (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3000.prod-sandbox.chainide.com).
 
 6. Try it out now!
