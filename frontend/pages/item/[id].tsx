@@ -303,6 +303,34 @@ export default function ItemDetail({ metadata }: any) {
               </svg>
               Item Activity
             </h5>
+            <div className="bg-[#F6F6F6] rounded-md p-2 mt-2">
+              <table className="table-auto border-0 w-full">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-2 text-[#818588] font-light">
+                      Event
+                    </th>
+                    <th className="px-4 py-2 text-[#818588] font-light">
+                      From
+                    </th>
+                    <th className="px-4 py-2 text-[#818588] font-light">To</th>
+                    <th className="px-4 py-2 text-[#818588] font-light">
+                      Date
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td className="px-4 py-2 text-center">John Doe</td>
+                    <td className="px-4 py-2 text-center">30</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-2 text-center">Jane Doe</td>
+                    <td className="px-4 py-2 text-center">25</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -473,8 +501,9 @@ export default function ItemDetail({ metadata }: any) {
   );
 }
 
-export async function getServerSideProps() {
-  const data = await getTokenMetadata("10");
+export async function getServerSideProps(context: any) {
+  const { id } = context.params;
+  const data = await getTokenMetadata(id);
   return {
     props: {
       metadata: data,
