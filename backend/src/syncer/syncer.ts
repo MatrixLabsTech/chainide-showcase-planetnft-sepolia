@@ -29,11 +29,15 @@ export class BlockSyncer {
     } else {
       if (blockInfo.status === BlockSyncStatus.InProgress) {
         fromBlock = blockInfo.oldBlockNumber - 1;
-        toBlock = fromBlock + 10;
+        toBlock = Math.min(fromBlock + 10, blockNumber);
       } else {
         fromBlock = blockInfo.newBlockNumber;
-        toBlock = blockInfo.newBlockNumber + 10;
+        toBlock = Math.min(blockInfo.newBlockNumber + 10, blockNumber);
       }
+    }
+    if (fromBlock > toBlock) {
+      log(`fromBlock ${fromBlock} > toBlock ${toBlock}, skipping`);
+      return;
     }
     log(`start syncing from ${fromBlock} to ${toBlock}`);
     await this.blockInfoService.startSync(fromBlock, toBlock);
