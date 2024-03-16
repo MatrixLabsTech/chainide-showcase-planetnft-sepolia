@@ -14,30 +14,38 @@ ChainIDE Showcase PlanetNFT is an NFT (non-fungible token) project that allows u
 
 ### Run backend
 
-1. Open Sandbox in ChainIDE.
+1. Navigate to `backend/.env.development.local` and update the `CONTRACT_ADDRESS` with your deployed contract address.
 
-2.  
+```
+CONTRACT_ADDRESS = "0xFC97AD42375e435C815EFcd6301265cE626D040A"
+```
+
+2. Open Sandbox in ChainIDE.
+
+3. 
 
 ```
    cd backend
 ```
-3. 
+4. 
 
 ```
    yarn install
 ```
 
-4. 
+5. 
 
 ```
-   yarn build && NODE_ENV=development CONTRACT_ADDRESS=<contract_address> node dist/server.js
+   yarn build
 ```
 
-   
-   Replace <contract_address> with the previously deployed contract address.
-      
+6.  
 
-5. [Port forwarding](https://chainide.gitbook.io/chainide-english-1/port-forwarding) HTTP on port 3001 and get the corresponding port. (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com).
+```
+   yarn dev
+```
+
+7. [Port forwarding](https://chainide.gitbook.io/chainide-english-1/port-forwarding) HTTP on port 3001 and get the corresponding port. (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com).
 
 ### Generate metadata
 
@@ -77,7 +85,7 @@ ATTRIBUTES: [{"trait_type": "rarity","value": "common"}]
 
 1. Interact with the planet contract you just deployed. Click on `setBaseURI` and paste the partially copied address from the previous step. Then click on "Submit".
 
-2. Navigate to `frontend/config.ts` and update the `contractAddress` with your deployed wallet address that you obtained earlier. Replace `baseApi` with the corresponding port generated in **Run backend** section (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com).
+2. Navigate to `frontend/config.ts` and update the `contractAddress` with your deployed wallet address that you obtained earlier. Replace `baseApi` with the corresponding port generated in **Run backend** section. (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com).
 
 ```typescript
   contractAddress: "0x19345E47170cbFb0ada10AB516e4dcD5A1A04BE8",
