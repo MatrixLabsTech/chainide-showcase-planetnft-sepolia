@@ -1,4 +1,4 @@
-import { BSC_NODE_URL } from '@/config';
+import { SEPOLIA_NODE_URL } from '@/config';
 import abi from '@/config/abi.json';
 import { BlockSyncStatus } from '@/interfaces/blockInfo.interface';
 import blockEventService, { BlockEventService } from '@/services/blockEvent.service';
@@ -10,7 +10,7 @@ import { BaseContract, ethers } from 'ethers';
 import schedule from 'node-schedule';
 
 export class BlockSyncer {
-  private provider: BaseProvider = new ethers.providers.JsonRpcProvider(BSC_NODE_URL);
+  private provider: BaseProvider = new ethers.providers.JsonRpcProvider(SEPOLIA_NODE_URL);
   private contract: BaseContract = new ethers.Contract(CONTRACT_ADDRESS, abi, this.provider);
   private blockInfoService: BlockInfoService = blockInfoService;
   private blockEventService: BlockEventService = blockEventService;
