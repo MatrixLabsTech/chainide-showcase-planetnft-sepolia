@@ -41,7 +41,7 @@ ChainIDE Showcase PlanetNFT is an NFT (non-fungible token) project that allows u
 
 ### Generate metadata
 
-1. Download `frontend/styles/ings` to the local environment.
+1. Download and extract `frontend/styles/ings` to the local environment.
 
 2. Preview `html/upload.html`
 3. Change BASEURI to the corresponding port of the backend.  (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com).
