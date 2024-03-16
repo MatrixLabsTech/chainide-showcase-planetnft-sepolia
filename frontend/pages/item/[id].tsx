@@ -50,8 +50,22 @@ export default function ItemDetail({ metadata }: any) {
       }
     });
 
-    formData.append("attributes", JSON.stringify(metadata.attributes));
+    const decoration = Object.keys(decorations).find(
+      (o: any) => decorations[o]
+    );
+    if (decoration) {
+      if (metadata.attributes.find((o: any) => o.trait_type === "item")) {
+        metadata.attributes.find((o: any) => o.trait_type === "item").value =
+          decoration;
+      } else {
+        metadata.attributes.push({
+          trait_type: "item",
+          value: decoration,
+        });
+      }
+    }
 
+    formData.append("attributes", JSON.stringify(metadata.attributes));
     await uploadMetadata(formData);
     toast.success("Upgrade success");
     window.location.reload();
@@ -101,7 +115,13 @@ export default function ItemDetail({ metadata }: any) {
       id,
       url: `/imgs/${type}/${id}.svg`,
     };
-    setDecorations((prev: any) => ({ ...prev, [type]: decoration }));
+    setDecorations((prev: any) => ({
+      cloud: null,
+      spaceship: null,
+      rocket: null,
+      satellite: null,
+      [type]: decoration,
+    }));
     // drawImage(metadata.image, Object.values({ ...decorations, [type]: decoration }));
   };
 
@@ -133,7 +153,6 @@ export default function ItemDetail({ metadata }: any) {
       metadata.image,
       Object.values(decorations).filter((o) => o)
     );
-    console.log(metadata.image, Object.values(decorations));
   }, [decorations]);
 
   return (
@@ -276,10 +295,21 @@ export default function ItemDetail({ metadata }: any) {
               (item: any) =>
                 item.trait_type === "rarity" && item.value === "uncommon"
             ) && (
-              <div className="h-[300px] flex items-center justify-center">
+              <div className="h-[300px] flex items-center justify-center gap-4">
                 <div className="rounded-lg bg-[#F6F6F6] text-[#3B3C3D] capitalize inline-flex flex-col px-6 py-3 items-center gap-1">
                   <span className="text-[#818588]">Rarity</span>
                   <span className="font-bold">Uncommon</span>
+                </div>
+
+                <div className="rounded-lg bg-[#F6F6F6] text-[#3B3C3D] capitalize inline-flex flex-col px-6 py-3 items-center gap-1">
+                  <span className="text-[#818588]">Item</span>
+                  <span className="font-bold">
+                    {
+                      metadata.attributes?.find(
+                        (item: any) => item.trait_type === "item"
+                      )?.value
+                    }
+                  </span>
                 </div>
               </div>
             )}
@@ -506,7 +536,7 @@ export async function getServerSideProps(context: any) {
   const data = await getTokenMetadata(id);
   return {
     props: {
-      metadata: data,
+      metadata: data ?? {},
     }, // will be passed to the page component as props
   };
 }
