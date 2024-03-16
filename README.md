@@ -1,3 +1,4 @@
+
 # ChainIDE Showcase PlanetNFT
 
 ## Introduction
@@ -15,19 +16,26 @@ ChainIDE Showcase PlanetNFT is an NFT (non-fungible token) project that allows u
 
 1. Open Sandbox in ChainIDE.
 
-2. ```
+2.  
+
+```
    cd backend
-   ```
+```
+3. 
 
-3. ```
+```
    yarn install
-   ```
+```
 
-4. ```
+4. 
+
+```
    yarn build && NODE_ENV=development CONTRACT_ADDRESS=<contract_address> node dist/server.js
-   ```
+```
 
+   
    Replace <contract_address> with the previously deployed contract address.
+      
 
 5. [Port forwarding](https://chainide.gitbook.io/chainide-english-1/port-forwarding) HTTP on port 3001 and get the corresponding port. (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3001.prod-sandbox.chainide.com).
 
@@ -40,7 +48,7 @@ ChainIDE Showcase PlanetNFT is an NFT (non-fungible token) project that allows u
 
 4. Customize TOKENID, NAME, DESCRIPTION, ATTRIBUTES, and IMAGE.
 
-For example：
+   For example：
 
 ```
 TOKENID: 1
@@ -84,19 +92,24 @@ export const planetPerPrice = BigNumber.from("1000000000");
 
 ### Run frontend
 
-Add another Sandbox in ChainIDE.
+1. Add another Sandbox in ChainIDE.
 
-2. ```
+2. 
+```
    cd fronted
-   ```
+```
 
-3. ```
+3. 
+
+```
    yarn install
-   ```
+```
 
-4. ```
+4. 
+
+```
    yarn dev
-   ```
+```
 
 5. [Port forwarding](https://chainide.gitbook.io/chainide-english-1/port-forwarding) HTTP on port 3000 and open the corresponding port. (e.g., https://sandbox-3dea326a0b10459cbf8639564123d8e7-ethereum-3000.prod-sandbox.chainide.com).
 
