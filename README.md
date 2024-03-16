@@ -96,7 +96,7 @@ ATTRIBUTES: [{"trait_type": "rarity","value": "common"}]
 3. Navigate to `frontend/components/contractinfo.ts`, set `planetPerPrice` to the value of `_salePrice` in the **Deploy Contracts** section.
 
 ```
-export const planetPerPrice = ether.BigNumber.from("1000000000");
+export const planetPerPrice = ethers.BigNumber.from("1000000000");
 ```
 
 ### Run frontend
