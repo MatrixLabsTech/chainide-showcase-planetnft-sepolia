@@ -1,49 +1,111 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      input {
-        display: block;
-        clear: both;
-        margin: 10px 0;
-      }
-    </style>
-  </head>
-
-  <body>
-    <h2>Planet Metadata Uploader</h2>
-
-    <label for="baseUri">baseUri :</label>
-    <input id="baseUri" autocomplete="off" value="http://localhost:3001" />
-
-    <label for="tokenId">TokenId :</label>
-    <input id="tokenId" autocomplete="off" value="0" />
-
-    <label for="name">Name :</label>
-    <input id="name" autocomplete="off" value="jupiter #0" />
-
-    <label for="description">Description :</label>
-    <input
-      id="description"
-      autocomplete="off"
-      value="Jupiter is the fifth planet from the Sun and the largest in the Solar System. "
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planet Metadata Uploader</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css"
+      rel="stylesheet"
     />
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div
+      class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2"
+    >
+      <div class="-mx-3 md:flex mb-6">
+        <div class="md:w-full px-3 mb-6 md:mb-0">
+          <label
+            class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+            for="baseUri"
+          >
+            BaseUri
+          </label>
+          <input
+            class="appearance-none block w-full bg-grey-lighter text-grey-darker border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            id="baseUri"
+            type="text"
+            value="http://localhost:3001"
+          />
 
-    <label for="attributes">Attributes :</label><br />
-    <textarea id="attributes" autocomplete="off" style="width: 170px" rows="5">
+          <label
+            class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+            for="tokenId"
+          >
+            TokenId
+          </label>
+          <input
+            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            id="tokenId"
+            type="text"
+            value="0"
+          />
+
+          <label
+            class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+            for="name"
+          >
+            Name
+          </label>
+          <input
+            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            id="name"
+            type="text"
+            value="Jupiter #0"
+          />
+
+          <label
+            class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+            for="description"
+          >
+            Description
+          </label>
+          <input
+            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            id="description"
+            type="text"
+            value="Jupiter is the fifth planet from the Sun and the largest in the Solar System. "
+          />
+
+          <label
+            class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+            for="attributes"
+          >
+            Attributes
+          </label>
+          <textarea
+            class="resize border rounded-md w-full h-20 py-2 px-3 focus:outline-none"
+            id="attributes"
+          >
 [{"trait_type": "rarity","value": "common"}]</textarea
-    ><br />
+          ><br />
 
-    <label for="image">Image :</label>
-    <input type="file" id="image" accept="image/*" />
+          <label
+            class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2"
+            for="image"
+          >
+            Image
+          </label>
+          <input
+            class="appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+            id="image"
+            type="file"
+            accept="image/*"
+          />
 
-    <button onclick="onSubmit();">submit</button>
-    <div id="tokenURIs"></div>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            type="button"
+            onclick="onSubmit()"
+          >
+            Submit
+          </button>
+        </div>
+      </div>
+      <div id="tokenURIs"></div>
 
-    <div id="result"></div>
+      <div id="result"></div>
+    </div>
 
     <script>
       async function onSubmit() {

@@ -15,7 +15,6 @@ export default function ItemDetail({ metadata }: any) {
   const { id } = router.query;
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [decoratedImage, setDecoratedImage] = useState<string>("");
   const [decorations, setDecorations] = useState<any>({
@@ -43,10 +42,19 @@ export default function ItemDetail({ metadata }: any) {
     formData.append("baseUri", config.baseApi);
     formData.append("name", metadata.name);
     formData.append("description", metadata.description);
-    formData.append("attributes", JSON.stringify(metadata.attributes));
     formData.append("image", convertDataURLToFile(decoratedImage) as File);
+
+    metadata.attributes?.forEach((item: any) => {
+      if (item.trait_type === "rarity") {
+        item.value = "uncommon";
+      }
+    });
+
+    formData.append("attributes", JSON.stringify(metadata.attributes));
+
     await uploadMetadata(formData);
     toast.success("Upgrade success");
+    window.location.reload();
   };
 
   const drawImage = (url: string, decorations: any[]) => {
@@ -67,7 +75,20 @@ export default function ItemDetail({ metadata }: any) {
         decorationImage.crossOrigin = "anonymous";
         decorationImage.src = decoration.url;
         decorationImage.onload = () => {
-          ctx?.drawImage(decorationImage, 0, 0);
+          let scale = 200 / decorationImage.width;
+          let newHeight = decorationImage.height * scale;
+          if (decoration.type === "cloud") {
+            ctx?.drawImage(decorationImage, 0, 80, 120, 120);
+          }
+          if (decoration.type === "spaceship") {
+            ctx?.drawImage(decorationImage, 0, 0, 40, 30);
+          }
+          if (decoration.type === "rocket") {
+            ctx?.drawImage(decorationImage, 120, 120, 40, 80);
+          }
+          if (decoration.type === "satellite") {
+            ctx?.drawImage(decorationImage, 120, 0, 80, 40);
+          }
           setDecoratedImage(ctx?.canvas.toDataURL("image/png") as string);
         };
       }
@@ -84,17 +105,17 @@ export default function ItemDetail({ metadata }: any) {
     // drawImage(metadata.image, Object.values({ ...decorations, [type]: decoration }));
   };
 
-  useEffect(() => {
-    fetch(metadata.image)
-      .then((response) => response.blob())
-      .then((blob) => {
-        let file = new File([blob], `${Date.now()}.jpg`, {
-          type: "image/jpeg",
-        });
-        setImageFile(file);
-      })
-      .catch((error) => console.error(error));
-  }, [metadata]);
+  // useEffect(() => {
+  //   fetch(metadata.image)
+  //     .then((response) => response.blob())
+  //     .then((blob) => {
+  //       let file = new File([blob], `${Date.now()}.jpg`, {
+  //         type: "image/jpeg",
+  //       });
+  //       setImageFile(file);
+  //     })
+  //     .catch((error) => console.error(error));
+  // }, [metadata]);
 
   useEffect(() => {
     if (showUpgradeModal) {
@@ -233,18 +254,35 @@ export default function ItemDetail({ metadata }: any) {
               Properties
             </h5>
 
-            <div className="flex items-center justify-center gap-4 flex-col">
-              <div className="rounded-lg bg-[#F6F6F6] text-[#3B3C3D] capitalize inline-flex flex-col px-6 py-3 items-center gap-1">
-                <span className="text-[#818588]">Rarity</span>
-                <span className="font-bold">Common</span>
+            {metadata.attributes?.find(
+              (item: any) =>
+                item.trait_type === "rarity" && item.value === "common"
+            ) && (
+              <div className="flex items-center justify-center gap-4 flex-col">
+                <div className="rounded-lg bg-[#F6F6F6] text-[#3B3C3D] capitalize inline-flex flex-col px-6 py-3 items-center gap-1">
+                  <span className="text-[#818588]">Rarity</span>
+                  <span className="font-bold">Common</span>
+                </div>
+                <button
+                  className="text-white bg-gradient-to-b from-[#7F77F5] to-[#4840C7] px-10 py-2 rounded-lg"
+                  onClick={() => setShowUpgradeModal(true)}
+                >
+                  Upgrade
+                </button>
               </div>
-              <button
-                className="text-white bg-gradient-to-b from-[#7F77F5] to-[#4840C7] px-10 py-2 rounded-lg"
-                onClick={() => setShowUpgradeModal(true)}
-              >
-                Upgrade
-              </button>
-            </div>
+            )}
+
+            {metadata.attributes?.find(
+              (item: any) =>
+                item.trait_type === "rarity" && item.value === "uncommon"
+            ) && (
+              <div className="h-[300px] flex items-center justify-center">
+                <div className="rounded-lg bg-[#F6F6F6] text-[#3B3C3D] capitalize inline-flex flex-col px-6 py-3 items-center gap-1">
+                  <span className="text-[#818588]">Rarity</span>
+                  <span className="font-bold">Uncommon</span>
+                </div>
+              </div>
+            )}
           </div>
           <div className="border border-gray-400 rounded p-2">
             <h5 className="font-bold text-[#3B3C3D] flex gap-1 items-center">
