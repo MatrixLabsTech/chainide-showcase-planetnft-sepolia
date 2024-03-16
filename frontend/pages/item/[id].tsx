@@ -201,7 +201,7 @@ export default function ItemDetail({ metadata, events }: any) {
               className="bg-[#F1F6FD] p-2 rounded-md cursor-pointer"
               onClick={() => {
                 window.open(
-                  `https://testnets.opensea.io/assets/bsc-testnet/${planetContractAddress}/${id}`
+                  `https://testnets.opensea.io/assets/sepolia/${planetContractAddress}/${id}`
                 );
               }}
             >

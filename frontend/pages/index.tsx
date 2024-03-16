@@ -44,7 +44,7 @@ export default function Home() {
       const mintedTokenId = res.events.filter(
         (ev: any) => ev.event === "Transfer"
       )[0].args[2] as ethers.BigNumber;
-      const openseaUrl = `https://testnets.opensea.io/assets/bsc-testnet/${planetContractAddress}/${mintedTokenId.toString()}`;
+      const openseaUrl = `https://testnets.opensea.io/assets/sepolia/${planetContractAddress}/${mintedTokenId.toString()}`;
       setOpenSeaUrl(openseaUrl);
       message.success(
         <div>
