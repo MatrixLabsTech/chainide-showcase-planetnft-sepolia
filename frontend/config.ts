@@ -1,5 +1,5 @@
 export default {
-  contractAddress: "0x04037436E88810CFc698c20e1239EE974cde6230",
+  contractAddress: "0x19345E47170cbFb0ada10AB516e4dcD5A1A04BE8",
   baseApi: "http://localhost:3001",
   contractABI: [
     {

@@ -22,3 +22,7 @@ export function uploadMetadata(metadata: any): Promise<any> {
     body: metadata,
   }).then((res) => res.json());
 }
+
+export function getItemEvents(tokenId: string): Promise<any> {
+  return fetch(`${BASE_API}/event/${tokenId}`).then((res) => res.json());
+}

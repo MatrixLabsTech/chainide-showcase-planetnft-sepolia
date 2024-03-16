@@ -53,17 +53,15 @@ export default function App({ Component, pageProps }: AppProps) {
     setSigner(signer);
     setAddress(address || "");
     setNetwork(network?.name);
-    console.log(address, 111);
     localStorage.setItem("accountAddress", address || "");
   }, [provider, setAddress, setNetwork, setProvider, setSigner]);
 
   const switchToMumbai = useCallback(async () => {
     if ((window as any).ethereum) {
-      const chainId = "0x61"; // BSC testnet
+      const chainId = "0xaa36a7"; // Sepolia testnet
       const currentChainId = await (window as any).ethereum.request({
         method: "eth_chainId",
       });
-
       if (currentChainId !== chainId) {
         try {
           // metamask new version bug, can not switch -> https://github.com/MetaMask/metamask-extension/issues/18509
@@ -79,14 +77,7 @@ export default function App({ Component, pageProps }: AppProps) {
               method: "wallet_addEthereumChain",
               params: [
                 {
-                  chainName: "bnbt",
                   chainId: chainId,
-                  nativeCurrency: {
-                    name: "BSC Testnet",
-                    decimals: 18,
-                    symbol: "BNB",
-                  },
-                  rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
                 },
               ],
             });
@@ -96,6 +87,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
       const network = await provider?.getNetwork();
       setNetwork(network?.name);
+      console.log(network);
       const signer = provider?.getSigner();
       const address = await signer?.getAddress();
       setSigner(signer);
@@ -162,7 +154,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 </button>
               </Link>
             )}
-            {address && network === "bnbt" ? (
+            {address && network === "sepolia" ? (
               <Dropdown
                 menu={{
                   items: [
@@ -179,7 +171,7 @@ export default function App({ Component, pageProps }: AppProps) {
                   className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center"
                 >
                   {" "}
-                  {address && network === "bnbt"
+                  {address && network === "sepolia"
                     ? formatHexAddress(address)
                     : "Connect Wallet"}
                 </button>

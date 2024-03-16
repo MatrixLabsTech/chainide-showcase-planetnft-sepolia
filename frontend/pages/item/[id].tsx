@@ -7,10 +7,15 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import config from "../../config";
 import { planetContractAddress } from "../../components/contractInfo";
-import { getTokenMetadata, uploadMetadata } from "../../services";
+import { formatHexAddress, formatDate } from "../../utils";
+import {
+  getTokenMetadata,
+  uploadMetadata,
+  getItemEvents,
+} from "../../services";
 import clsx from "clsx";
 
-export default function ItemDetail({ metadata }: any) {
+export default function ItemDetail({ metadata, events }: any) {
   const router = useRouter();
   const { id } = router.query;
 
@@ -23,7 +28,6 @@ export default function ItemDetail({ metadata }: any) {
     rocket: null,
     satellite: null,
   });
-
   const convertDataURLToFile = (dataURL: string) => {
     const arr = dataURL.split(",");
     const mime = arr[0].match(/:(.*?);/)![1];
@@ -34,6 +38,11 @@ export default function ItemDetail({ metadata }: any) {
       u8arr[n] = bstr.charCodeAt(n);
     }
     return new File([u8arr], `${Date.now()}.png`, { type: mime });
+  };
+
+  const fetchItemEvents = async () => {
+    const res = await getItemEvents(id as string);
+    console.log(res, 111);
   };
 
   const handleUpgradeMetadata = async () => {
@@ -350,14 +359,20 @@ export default function ItemDetail({ metadata }: any) {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td className="px-4 py-2 text-center">John Doe</td>
-                    <td className="px-4 py-2 text-center">30</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-2 text-center">Jane Doe</td>
-                    <td className="px-4 py-2 text-center">25</td>
-                  </tr>
+                  {events.map((event: any, index: number) => (
+                    <tr key={event.transactionHash}>
+                      <td className="px-4 py-2 text-center">{event.event}</td>
+                      <td className="px-4 py-2 text-center">
+                        {formatHexAddress(event.from)}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        {formatHexAddress(event.to)}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        {formatDate(event.eventTime * 1000)}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -534,9 +549,11 @@ export default function ItemDetail({ metadata }: any) {
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
   const data = await getTokenMetadata(id);
+  const events = await getItemEvents(id);
   return {
     props: {
       metadata: data ?? {},
+      events: events ?? [],
     }, // will be passed to the page component as props
   };
 }

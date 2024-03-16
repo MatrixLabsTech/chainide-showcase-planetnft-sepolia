@@ -29,7 +29,7 @@ export default function Upgrade() {
       return;
     }
 
-    if (network !== "bnbt") return;
+    if (network !== "sepolia") return;
     setLoading(true);
     const contract = new ethers.Contract(
       planetContractAddress,
