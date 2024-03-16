@@ -10,7 +10,7 @@ export class BlockEventsDao {
   }
 
   private async init() {
-    this.db = await new Low(new JSONFile<BlockEvents>('./src/data/blockEvents.json'), blockEvents);
+    this.db = await new Low(new JSONFile<BlockEvents>('./src/db/blockEvents.json'), blockEvents);
   }
 
   async getBlockEvents(tokenId: number): Promise<BlockEvent[]> {
