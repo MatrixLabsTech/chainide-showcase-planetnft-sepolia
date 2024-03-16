@@ -2,4 +2,3 @@ node_modules
 logs/
 .deps
 .build
-backend/src/db/*
