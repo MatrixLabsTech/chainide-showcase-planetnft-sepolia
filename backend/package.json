@@ -6,6 +6,7 @@
   "license": "ISC",
   "scripts": {
     "start": "pm2 start ecosystem.config.js",
+    "dev": "NODE_ENV=development node dist/server.js",
     "build": "swc src -d dist --source-maps --copy-files",
     "build:tsc": "tsc && tsc-alias",
     "test": "jest --forceExit --detectOpenHandles",
