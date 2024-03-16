@@ -75,7 +75,7 @@ ATTRIBUTES: [{"trait_type": "rarity","value": "common"}]
 ```
 TOKENID: 3
 NAME: Moon #3
-DESCRIPTION: The Moon is Earth's only natural satellite but not a planet. 
+DESCRIPTION: The Moon is Earth's only natural satellite but not a planet.
 ATTRIBUTES: [{"trait_type": "rarity","value": "common"}]
 ```
 
