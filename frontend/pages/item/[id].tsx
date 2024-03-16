@@ -99,19 +99,7 @@ export default function ItemDetail({ metadata, events }: any) {
         decorationImage.src = decoration.url;
         decorationImage.onload = () => {
           let scale = 200 / decorationImage.width;
-          let newHeight = decorationImage.height * scale;
-          if (decoration.type === "cloud") {
-            ctx?.drawImage(decorationImage, 0, 80, 120, 120);
-          }
-          if (decoration.type === "spaceship") {
-            ctx?.drawImage(decorationImage, 0, 0, 40, 30);
-          }
-          if (decoration.type === "rocket") {
-            ctx?.drawImage(decorationImage, 120, 120, 40, 80);
-          }
-          if (decoration.type === "satellite") {
-            ctx?.drawImage(decorationImage, 120, 0, 80, 40);
-          }
+          ctx?.drawImage(decorationImage, 0, 0, 200, 200);
           setDecoratedImage(ctx?.canvas.toDataURL("image/png") as string);
         };
       }
@@ -388,7 +376,7 @@ export default function ItemDetail({ metadata, events }: any) {
         destroyOnClose
       >
         <div className="flex">
-          <div className="w-1/3">
+          <div className="w-1/3 min-w-[300px]">
             <h5 className="text-center font-bold">Preview</h5>
 
             <div className="flex items-center justify-center px-4 py-16 flex-col gap-12">
@@ -408,7 +396,7 @@ export default function ItemDetail({ metadata, events }: any) {
               </div>
             </div>
           </div>
-          <div className="flex-grow">
+          <div className="flex-grow w-[500px]">
             <h5 className="text-center font-bold">Items</h5>
 
             <div className="bg-[#f6f6f6] rounded-lg p-4 mt-8">
@@ -425,7 +413,7 @@ export default function ItemDetail({ metadata, events }: any) {
                           <div
                             key={i}
                             className={clsx(
-                              "w-[120px] h-[120px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
+                              "w-[160px] h-[160px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
                               {
                                 "border-2 border-[#625ADD]":
                                   decorations.cloud?.id === i + 1,
@@ -435,12 +423,10 @@ export default function ItemDetail({ metadata, events }: any) {
                               handleSelectDecoration("cloud", i + 1)
                             }
                           >
-                            <div className="w-[100px] h-[100px] rounded-full bg-[#C3C2C5]">
-                              <img
-                                src={`/imgs/cloud/${i + 1}.svg`}
-                                className="h-full"
-                              />
-                            </div>
+                            <img
+                              src={`/imgs/placeholder/cloud/${i + 1}.svg`}
+                              className="h-full"
+                            />
                           </div>
                         ))}
                       </div>
@@ -455,7 +441,7 @@ export default function ItemDetail({ metadata, events }: any) {
                           <div
                             key={i}
                             className={clsx(
-                              "w-[120px] h-[120px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
+                              "w-[160px] h-[160px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
                               {
                                 "border-2 border-[#625ADD]":
                                   decorations.spaceship?.id === i + 1,
@@ -465,12 +451,10 @@ export default function ItemDetail({ metadata, events }: any) {
                               handleSelectDecoration("spaceship", i + 1)
                             }
                           >
-                            <div className="w-[100px] h-[100px] rounded-full bg-[#C3C2C5]">
-                              <img
-                                src={`/imgs/spaceship/${i + 1}.svg`}
-                                className="h-[20px]"
-                              />
-                            </div>
+                            <img
+                              src={`/imgs/placeholder/spaceship/${i + 1}.svg`}
+                              className="w-full"
+                            />
                           </div>
                         ))}
                       </div>
@@ -485,7 +469,7 @@ export default function ItemDetail({ metadata, events }: any) {
                           <div
                             key={i}
                             className={clsx(
-                              "w-[120px] h-[120px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
+                              "w-[160px] h-[160px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
                               {
                                 "border-2 border-[#625ADD]":
                                   decorations.rocket?.id === i + 1,
@@ -495,12 +479,10 @@ export default function ItemDetail({ metadata, events }: any) {
                               handleSelectDecoration("rocket", i + 1)
                             }
                           >
-                            <div className="w-[100px] h-[100px] rounded-full bg-[#C3C2C5]">
-                              <img
-                                src={`/imgs/rocket/${i + 1}.svg`}
-                                className="h-[40px]"
-                              />
-                            </div>
+                            <img
+                              src={`/imgs/placeholder/rocket/${i + 1}.svg`}
+                              className="w-full"
+                            />
                           </div>
                         ))}
                       </div>
@@ -515,7 +497,7 @@ export default function ItemDetail({ metadata, events }: any) {
                           <div
                             key={i}
                             className={clsx(
-                              "w-[120px] h-[120px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
+                              "w-[150px] h-[150px] bg-[#EFEFF0] rounded-md flex items-center justify-center cursor-pointer hover:shadow-md hover:shadow-[#625ADD] transition-shadow",
                               {
                                 "border-2 border-[#625ADD]":
                                   decorations.satellite?.id === i + 1,
@@ -525,12 +507,10 @@ export default function ItemDetail({ metadata, events }: any) {
                               handleSelectDecoration("satellite", i + 1)
                             }
                           >
-                            <div className="w-[100px] h-[100px] rounded-full bg-[#C3C2C5]">
-                              <img
-                                src={`/imgs/satellite/${i + 1}.svg`}
-                                className="h-[40px]"
-                              />
-                            </div>
+                            <img
+                              src={`/imgs/placeholder/satellite/${i + 1}.svg`}
+                              className="w-full"
+                            />
                           </div>
                         ))}
                       </div>
