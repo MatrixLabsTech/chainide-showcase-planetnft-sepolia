@@ -10,7 +10,7 @@ export class BlockInfoDao {
   }
 
   private async init() {
-    this.db = await new Low(new JSONFile<BlockInfos>('./src/db/blockInfo.json'), blockInfoData);
+    this.db = await new Low(new JSONFile<BlockInfos>('./src/data/blockInfo.json'), blockInfoData);
   }
 
   async selectOne(): Promise<BlockInfo> {

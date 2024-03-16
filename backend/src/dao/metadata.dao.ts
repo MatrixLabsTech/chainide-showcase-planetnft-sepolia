@@ -12,7 +12,7 @@ export class MetadataDao {
   }
 
   private async init() {
-    this.db = await new Low(new JSONFile<Metadatas>('./src/db/metadata.json'), metadatas);
+    this.db = await new Low(new JSONFile<Metadatas>('./src/data/metadata.json'), metadatas);
   }
 
   async upsert(metadata: Metadata): Promise<void> {
