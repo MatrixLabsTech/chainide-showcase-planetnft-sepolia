@@ -1,12 +1,3 @@
 {
-  "metadatas": [
-    {
-      "tokenId": "10",
-      "name": "Jupiter #10",
-      "description": "Jupiter is the fifth planet from the Sun and the largest in the Solar System. ",
-      "attributes": "[{\"trait_type\":\"rarity\",\"value\":\"uncommon\"},{\"trait_type\":\"item\",\"value\":\"spaceship\"}]",
-      "image": "http://localhost:3001/1710567726248.png",
-      "owner": ""
-    }
-  ]
+  "metadatas": []
 }
