@@ -14,9 +14,10 @@ ChainIDE Showcase PlanetNFT is an NFT (non-fungible token) project that allows u
 
 ### Run backend
 
-1. Navigate to `backend/.env.development.local` and update the `CONTRACT_ADDRESS` with your deployed contract address.
+1. Navigate to `backend/.env.development.local` and update the `CONTRACT_ADDRESS` with your deployed contract address. (It would be better to replace SEPOLIA_NODE_URL with your own NODE, which you can apply for at [Infura](https://www.infura.io/) and [Alchemy](https://www.alchemy.com/).)
 
 ```
+SEPOLIA_NODE_URL = "https://eth-sepolia.g.alchemy.com/v2/vO6iRiVuAUX0qFHROnjiEm9LLr044e26"
 CONTRACT_ADDRESS = "0xFC97AD42375e435C815EFcd6301265cE626D040A"
 ```
 
