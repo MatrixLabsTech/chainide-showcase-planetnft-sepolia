@@ -15,11 +15,13 @@ import {
 } from "../../services";
 import clsx from "clsx";
 
-export default function ItemDetail({ metadata, events }: any) {
+export default function ItemDetail() {
   const router = useRouter();
   const { id } = router.query;
 
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [metadata, setMetadata] = useState<any>({});
+  const [events, setEvents] = useState<any[]>([]);
 
   const [decoratedImage, setDecoratedImage] = useState<string>("");
   const [decorations, setDecorations] = useState<any>({
@@ -28,6 +30,17 @@ export default function ItemDetail({ metadata, events }: any) {
     rocket: null,
     satellite: null,
   });
+
+  const fetchMetadata = async () => {
+    const res = await getTokenMetadata(id as string);
+    setMetadata(res);
+  };
+
+  const fetchItemEvents = async () => {
+    const res = await getItemEvents(id as string);
+    setEvents(res);
+  };
+
   const convertDataURLToFile = (dataURL: string) => {
     const arr = dataURL.split(",");
     const mime = arr[0].match(/:(.*?);/)![1];
@@ -38,11 +51,6 @@ export default function ItemDetail({ metadata, events }: any) {
       u8arr[n] = bstr.charCodeAt(n);
     }
     return new File([u8arr], `${Date.now()}.png`, { type: mime });
-  };
-
-  const fetchItemEvents = async () => {
-    const res = await getItemEvents(id as string);
-    console.log(res, 111);
   };
 
   const handleUpgradeMetadata = async () => {
@@ -151,6 +159,11 @@ export default function ItemDetail({ metadata, events }: any) {
       Object.values(decorations).filter((o) => o)
     );
   }, [decorations]);
+
+  useEffect(() => {
+    fetchMetadata();
+    fetchItemEvents();
+  }, [id]);
 
   return (
     <div className="pt-20 container mx-auto p-4 md:px-0 ">
@@ -528,11 +541,9 @@ export default function ItemDetail({ metadata, events }: any) {
 
 export async function getServerSideProps(context: any) {
   const { id } = context.params;
-  const data = await getTokenMetadata(id);
   const events = await getItemEvents(id);
   return {
     props: {
-      metadata: data ?? {},
       events: events ?? [],
     }, // will be passed to the page component as props
   };
