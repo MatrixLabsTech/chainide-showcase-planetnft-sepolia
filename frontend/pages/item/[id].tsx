@@ -341,7 +341,7 @@ export default function ItemDetail() {
                   strokeWidth="0.5"
                 />
               </svg>
-              Item Activity
+              Item Activities
             </h5>
             <div className="bg-[#F6F6F6] rounded-md p-2 mt-2">
               <table className="table-auto border-0 w-full">
@@ -447,7 +447,7 @@ export default function ItemDetail() {
                   },
                   {
                     key: "2",
-                    label: "Spaceship",
+                    label: "Spaceships",
                     children: (
                       <div className="flex gap-2">
                         {[...Array(3)].map((_, i) => (
@@ -475,7 +475,7 @@ export default function ItemDetail() {
                   },
                   {
                     key: "3",
-                    label: "Rocket",
+                    label: "Rockets",
                     children: (
                       <div className="flex gap-2">
                         {[...Array(2)].map((_, i) => (
@@ -503,7 +503,7 @@ export default function ItemDetail() {
                   },
                   {
                     key: "4",
-                    label: "Satellite",
+                    label: "Satellites",
                     children: (
                       <div className="flex gap-2">
                         {[...Array(3)].map((_, i) => (
